@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Prueba Coomeva</title>
+	<style type="text/css">
+body {
+	background-image: url(fondoazul1.jpg);
+	font-family: helvetica;
+	font-style: inherit;
+	font-size: 11px;
+}
+
+.menu {
+	width: 800px;
+	margin: auto;
+}
+
+.cuerpo {
+	background-image: url(fondo_gris.jpg);
+	position: absolute;
+	top: 60px;
+	width: 800px;
+	height: 600px;
+}
+
+.panel {
+	position: relative;
+	top: 50px;
+	margin: auto;
+	width: 750px;
+	height: 80px;
+}
+
+.descripcion {
+	font-size: 12px;
+	font-weight: 900;
+}
+
+.dataTable2 {
+	position: relative;
+	top: 100px;
+	right: 20px;
+	margin: auto;
+	width: 600px;
+	height: 200px;
+}
+
+th {
+	font-size: 13px;
+	font-weight: 900;
+}
+
+.fa {
+	color: grey;
+}
+
+.fa-trash {
+	color: grey;
+}
+
+.ge-icon {
+	background: url(lupa.jpg) no-repeat !important;
+	height: 50px;
+	width: 50px;
+	text-align: center;
+}
+</style>
+</h:head>
+<h:body>
+
+	<h:form id="form">
+		<div class="menu">
+			<div class="cuerpo">
+
+				<p:growl id="growl" life="5000" />
+
+				<p:panelGrid columns="2" styleClass="panel" id="panel">
+					<f:facet name="header">
+				Realizar Venta
+				</f:facet>
+					<p:commandButton value="Buscar cliente"
+						actionListener="#{venta.consultarCliente}"
+						update="panelCliente,singleDT,growl" />
+					<p:inputText placeholder="Identificación"
+						value="#{venta.txtIdentificacionCliente}" />
+
+
+
+				</p:panelGrid>
+
+
+				<p:panelGrid columns="6" styleClass="panel" id="panelCliente">
+					<f:facet name="header">
+				Información del cliente
+				</f:facet>
+					<h:outputText value="Identificación:" styleClass="descripcion" />
+					<p:outputLabel value="#{venta.cliente.identifiacion}" />
+
+					<h:outputText value="Nombre:" styleClass="descripcion" />
+					<p:outputLabel value="#{venta.cliente.nombres}" />
+
+					<h:outputText value="Apellido:" styleClass="descripcion" />
+					<p:outputLabel value="#{venta.cliente.apellidos}" />
+
+					<h:outputText value="Dirección:" styleClass="descripcion" />
+					<p:outputLabel value="#{venta.cliente.direccion}" />
+
+					<h:outputText value="Teléfono:" styleClass="descripcion" />
+					<p:outputLabel value="#{venta.cliente.telefono}" />
+
+					<h:outputText value="Email:" styleClass="descripcion" />
+					<p:outputLabel value="#{venta.cliente.email}" />
+
+
+				</p:panelGrid>
+
+
+
+				<f:facet name="header">
+				Información del cliente
+				</f:facet>
+
+
+				<p:dataTable id="singleDT" styleClass="dataTable2" paginator="true"
+					rows="5" var="detalleProducto" value="#{venta.listaProductos}"
+					emptyMessage="Listado de productos vacio"
+					filteredValue="#{venta.filtroListaProductos}">>
+
+					<f:facet name="header">
+      				  Listado de productos
+    				</f:facet>
+
+					<p:column headerText="Código:" filterMatchMode="contains" filterBy="#{detalleProducto.codigo}">
+						<h:outputText value="#{detalleProducto.codigo}" />
+					</p:column>
+
+					<p:column headerText="Nombre:" filterMatchMode="contains" filterBy="#{detalleProducto.nombre}">
+						<h:outputText value="#{detalleProducto.nombre}" />
+					</p:column>
+
+					<p:column headerText="Agregar producto:">
+						<p:commandButton update=":form:carDetail,:form:growl"
+							oncomplete="PF('proDialog').show()" icon="ge-icon" title="View">
+							<f:setPropertyActionListener value="#{detalleProducto}"
+								target="#{venta.productoSeleccionado}" />
+						</p:commandButton>
+					</p:column>
+
+
+					<f:facet name="footer">
+						<p:commandButton process="singleDT"
+							update="singleDT,:form:totalDT,:form:growl" value="Pagar"
+							oncomplete="PF('pagDialog').show()" />
+					</f:facet>
+
+				</p:dataTable>
+
+
+
+
+				<p:dialog header="Producto Info" widgetVar="proDialog" modal="true"
+					showEffect="fade" hideEffect="fade" resizable="true">
+					<p:outputPanel id="carDetail">
+
+						<p:panelGrid id="pan" columns="2" columnClasses="label,value"
+							rendered="#{not empty venta.productoSeleccionado}">
+
+
+							<h:outputText value="Valor unidad:" />
+							<h:outputText value="#{venta.productoSeleccionado.valorUnidad}">
+								<f:convertNumber pattern="¤#,##0.00" currencySymbol="$" />
+							</h:outputText>
+
+							<h:outputText value="Stock:" />
+							<h:outputText value="#{venta.productoSeleccionado.stock}" />
+
+							<h:outputText value="Cantidad a comprar:" />
+							<p:inputText placeholder="CantidadVenta"
+								value="#{venta.intCantidadProducto}" />
+
+
+							<p:commandButton value="Agregar Producto"
+								action="#{venta.agregarProducto()}"
+								oncomplete="PF('proDialog').hide();"
+								update="pan,totalDT,:form:growl" />
+
+
+						</p:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
+
+
+
+				<p:dialog header="Productos a pagar" widgetVar="pagDialog"
+					modal="true" width="750" height="400" showEffect="fade"
+					hideEffect="fade" resizable="true">
+
+					<p:dataTable id="totalDT" var="detalleProducto"
+						value="#{venta.listaFactura}">
+
+						<p:column headerText="Código:">
+							<h:outputText value="#{detalleProducto.testProducto.codigo}" />
+						</p:column>
+
+						<p:column headerText="Nombre:">
+							<h:outputText value="#{detalleProducto.testProducto.nombre}" />
+						</p:column>
+
+						<p:column headerText="Cantidad:">
+							<h:outputText value="#{detalleProducto.cantidad}" />
+						</p:column>
+
+
+						<p:column headerText="Valor unitario:">
+							<h:outputText value="#{detalleProducto.testProducto.valorUnidad}">
+								<f:convertNumber pattern="¤#,##0.00" currencySymbol="$" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Total por producto:">
+							<h:outputText value="#{detalleProducto.valorTotal}">
+								<f:convertNumber pattern="¤#,##0.00" currencySymbol="$" />
+							</h:outputText>
+						</p:column>
+
+
+						<f:facet name="footer">
+							<h:outputText value="Total:" />
+							<h:outputText value="#{venta.total}">
+								<f:convertNumber type="currency" currencySymbol="$" />
+							</h:outputText>
+							<p:commandButton update="totalDT,:form:growl" value="Pagar"
+								action="#{venta.generarFactura()}"
+								oncomplete="PF('pagDialog').hide();" />
+						</f:facet>
+
+
+
+
+
+					</p:dataTable>
+
+
+				</p:dialog>
+
+
+
+
+			</div>
+		</div>
+
+
+
+
+	</h:form>
+
+</h:body>
+</html>

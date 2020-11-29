@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Nov 27, 2020 11:18:46 PM by Hibernate Tools 5.4.21.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="DBTEST" dynamic-insert="false" dynamic-update="false" mutable="true" name="co.com.prueba.modelo.TestCliente" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="TEST_CLIENTE">
+        <id name="idCliente" type="java.lang.Integer">
+            <column name="IdCliente"/>
+            <generator class="identity"/>
+        </id>
+        <property generated="never" lazy="false" name="identifiacion" optimistic-lock="true" type="int" unique="false">
+            <column name="Identifiacion" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="nombres" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="Nombres" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="apellidos" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="Apellidos" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="direccion" optimistic-lock="true" type="string" unique="false">
+            <column length="300" name="Direccion" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="telefono" optimistic-lock="true" type="string" unique="false">
+            <column length="50" name="Telefono"/>
+        </property>
+        <property generated="never" lazy="false" name="email" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="Email"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="testFacturas" optimistic-lock="true" sort="unsorted" table="TEST_FACTURA">
+            <key on-delete="noaction">
+                <column name="IdCliente" not-null="true"/>
+            </key>
+            <one-to-many class="co.com.prueba.modelo.TestFactura" embed-xml="true" not-found="exception"/>
+        </set>
+    </class>
+</hibernate-mapping>

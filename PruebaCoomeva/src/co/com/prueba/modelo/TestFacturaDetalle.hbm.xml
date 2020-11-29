@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Nov 27, 2020 11:18:46 PM by Hibernate Tools 5.4.21.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="DBTEST" dynamic-insert="false" dynamic-update="false" mutable="true" name="co.com.prueba.modelo.TestFacturaDetalle" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="TEST_FACTURA_DETALLE">
+        <id name="idFacturaDetalle" type="int">
+            <column name="IdFacturaDetalle"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="co.com.prueba.modelo.TestFactura" embed-xml="true" fetch="select" insert="true" name="testFactura" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column name="IdFactura" not-null="true"/>
+        </many-to-one>
+        <many-to-one class="co.com.prueba.modelo.TestProducto" embed-xml="true" fetch="select" insert="true" name="testProducto" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column name="IdProducto" not-null="true"/>
+        </many-to-one>
+        <property generated="never" lazy="false" name="cantidad" optimistic-lock="true" type="int" unique="false">
+            <column name="Cantidad" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="valorUnidad" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ValorUnidad" not-null="true" precision="18" scale="3"/>
+        </property>
+        <property generated="never" lazy="false" name="valorTotal" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ValorTotal" not-null="true" precision="18" scale="3"/>
+        </property>
+    </class>
+</hibernate-mapping>
